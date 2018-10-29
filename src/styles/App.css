@@ -38,6 +38,12 @@ body {
   height: 40px;
   text-transform: uppercase;
   width: 120px;
+  transition: .3s;
+}
+
+.flat-button[disabled] {
+  background-color: #ccc;
+  color: #fff;
 }
 
 .flex-container {
@@ -49,14 +55,12 @@ body {
   font-size: 1.8em;
 }
 
-.input-line {
-  background: transparent !important;
-  border: none !important;
-  border-bottom: 1px solid #333 !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  color: #333 !important;
-  padding-left: 0 !important;
+.hide {
+  display: none;
+}
+
+.text-red {
+  color: red
 }
 
 .border-gray { border: 1px solid #333; }

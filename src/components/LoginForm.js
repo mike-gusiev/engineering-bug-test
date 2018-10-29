@@ -1,11 +1,35 @@
 import React, { Component } from 'react';
-import { Col, Form, FormGroup, FormControl, Glyphicon } from 'react-bootstrap';
+import { Col, Form, FormGroup, FormControl, Glyphicon, ControlLabel } from 'react-bootstrap';
 import '../styles/App.css';
 
 class LoginForm extends Component {
 
+  state = {
+    email: '',
+    password: '',
+    emailValid: false,
+    passwordValid: false,
+  }
+
   onFormSubmit(event) {
     event.preventDefault();
+  }
+
+  validateForm = () => {
+    const emailValid = this.state.email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+    const passwordValid = this.state.password.length > 6;
+    this.setState({
+      emailValid,
+      passwordValid
+    })
+  }
+
+  handleUsersInput = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    this.setState({
+      [name]: value
+    }, this.validateForm)
   }
 
   render() {
@@ -18,23 +42,32 @@ class LoginForm extends Component {
               <Col sm={8}><h3 className='text-left text-gray'>Sign in</h3></Col>
             </FormGroup>
 
-            <FormGroup controlId='formHorizontalEmail'>
+            <FormGroup controlId='formHorizontalEmail' validationState={!this.state.emailValid ? 'error' : 'success'}>
               <Col sm={8}>
                 <FormControl className='input-line'
                              type='email'
                              name='email'
                              placeholder='Email Address'
                              autoCapitalize='off'
-                             autoCorrect='off' />
+                             autoCorrect='off'
+                             value={this.state.email}
+                             onChange={this.handleUsersInput}/>
+                <FormControl.Feedback/>
+                {!this.state.emailValid ? (<ControlLabel>Your email is incorrect</ControlLabel>) : null}
               </Col>
             </FormGroup>
 
-            <FormGroup controlId='formHorizontalPassword'>
+            <FormGroup controlId='formHorizontalPassword'
+                       validationState={!this.state.passwordValid ? 'error' : 'success'}>
               <Col sm={8}>
                 <FormControl className='input-line'
                              type='password'
                              name='password'
-                             placeholder='Password' />
+                             placeholder='Password'
+                             value={this.state.password}
+                             onChange={this.handleUsersInput}/>
+                <FormControl.Feedback/>
+                {!this.state.passwordValid ? <ControlLabel>Your password is incorrect</ControlLabel> : null}
               </Col>
             </FormGroup>
 
@@ -42,12 +75,12 @@ class LoginForm extends Component {
               <Col sm={8} className='mt6x'>
                 <button className='flat-button border-gray'
                         type='submit'
-                        onClick={this.handleLogin}>Next
-                        <Glyphicon className='pl2x' glyph='menu-right' />
+                        disabled={!this.state.emailValid || !this.state.passwordValid}
+                        onClick={this.props.handleLogin}>Next
+                  <Glyphicon className='pl2x' glyph='menu-right'/>
                 </button>
               </Col>
             </FormGroup>
-
           </Col>
         </fieldset>
       </Form>
